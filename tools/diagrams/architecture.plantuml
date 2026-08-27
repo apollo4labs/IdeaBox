@@ -1,0 +1,39 @@
+@startuml
+!theme plain
+
+title IdeaBox Repository Structure
+
+package "IdeaBox" {
+  [README.md] as README
+  [topics/] as Topics
+  [templates/] as Templates
+  [tools/] as Tools
+  [examples/] as Examples
+}
+
+package "topics/" {
+  [saas/] as SaaS
+  [mobile/] as Mobile
+  [ai/] as AI
+  [hardware/] as HW
+}
+
+package "Each Idea" {
+  [README.md] as IReadme
+  [diagrams/] as IDiag
+  [*.md files] as IMd
+}
+
+Topics --> IReadme
+Topics --> IDiag
+Topics --> IMd
+Templates --> IReadme : "template for"
+Tools --> IDiag : "diagram tools"
+
+note right of Tools
+  Draw.io files (.drawio)
+  PlantUML files (.plantuml, .puml)
+  Rendering scripts
+end note
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+!theme plain
+
+title Idea Development Workflow
+
+(*) --> "💡 Spark: New idea"
+"💡 Spark: New idea" --> "📁 Create folder\nunder topics/"
+"📁 Create folder\nunder topics/" --> "📝 Draft problem.md\n& solution.md"
+"📝 Draft problem.md\n& solution.md" --> "🎨 Sketch diagrams\n(drawio/plantuml)"
+"🎨 Sketch diagrams\n(drawio/plantuml)" --> "💼 Define business\nmodel"
+"💼 Define business\nmodel" --> "🏗️ Design\narchitecture"
+"🏗️ Design\narchitecture" --> "🚀 Scope MVP"
+"🚀 Scope MVP" --> "📊 Review &\niterate"
+"📊 Review &\niterate" --> [Yes] "📈 Status: Concept"
+"📊 Review &\niterate" --> [No] "📝 Refine docs"
+"📝 Refine docs" --> "📊 Review &\niterate"
+"📈 Status: Concept" --> "🛠️ Build MVP?"
+"🛠️ Build MVP?" --> [Yes] "💻 Move to\nseparate repo"
+"🛠️ Build MVP?" --> [No] "🗄️ Archive"
+
+"💻 Move to\nseparate repo" as B
+B --> (*)
+
+"🗄️ Archive" as A
+A --> "💤 Dormant"
+"💤 Dormant" --> (*)
+
+@enduml
