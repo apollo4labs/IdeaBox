@@ -4,6 +4,12 @@ Collection of Software-as-a-Service concepts and business ideas.
 
 ## Current Ideas
 
+### University Wiki
+A student-run MediaWiki knowledge hub for a university — notes, lectures, exams, forums, and a scraper bot that keeps everything current from the official university page. Everything a student needs from orientation to doctorate.
+
+**Status:** Concept
+**Folder:** `topics/saas/university-wiki/`
+
 ### Smart Task Prioritizer
 An intelligent task management tool that uses machine learning to automatically prioritize your daily tasks based on deadlines, importance, energy levels, and dependency graphs.
 
