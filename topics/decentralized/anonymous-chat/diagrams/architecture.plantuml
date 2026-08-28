@@ -1,0 +1,80 @@
+@startuml
+!theme plain
+
+title Anonymous Decentralized Chat - System Architecture
+
+package "Node A (User 1)" {
+    [CLI / Client UI] as A_Client
+    [Rust Homeserver] as A_Server
+    [Identity Manager] as A_Identity
+    [Message Queue] as A_Queue
+    [Tor Daemon (arti)] as A_Tor
+    [SQLite (peers, queue)] as A_DB
+
+    A_Client --> A_Server
+    A_Server --> A_Identity
+    A_Server --> A_Queue
+    A_Queue --> A_DB
+    A_Server --> A_Tor
+    A_Identity --> A_DB
+}
+
+package "Node B (User 2)" {
+    [CLI / Client UI] as B_Client
+    [Rust Homeserver] as B_Server
+    [Identity Manager] as B_Identity
+    [Message Queue] as B_Queue
+    [Tor Daemon (arti)] as B_Tor
+    [SQLite (peers, queue)] as B_DB
+
+    B_Client --> B_Server
+    B_Server --> B_Identity
+    B_Server --> B_Queue
+    B_Queue --> B_DB
+    B_Server --> B_Tor
+    B_Identity --> B_DB
+}
+
+package "Node C (User 3, optional relay)" {
+    [Rust Homeserver] as C_Server
+    [Tor Daemon (arti)] as C_Tor
+    [SQLite] as C_DB
+    C_Server --> C_Tor
+    C_Server --> C_DB
+}
+
+cloud "Tor Network" {
+    [Tor Routers / Guard / Middle / Exit-free] as TorNet
+}
+
+A_Tor <--> TorNet : "v3 onion service\n+ circuits"
+B_Tor <--> TorNet
+C_Tor <--> TorNet
+
+note right of A_Tor
+  No public IP needed
+  No port forwarding
+  Behind CGNAT is fine
+  Outbound connection only
+end note
+
+note right of A_Identity
+  Ed25519 keypair
+  Onion address derived
+  from public key
+end note
+
+note right of A_Queue
+  Offline messages retry
+  Auto-flush on reconnect
+  Configurable size cap
+end note
+
+note bottom of TorNet
+  End-to-end encrypted
+  3-hop circuits
+  No exit nodes used
+  (onion services only)
+end note
+
+@enduml

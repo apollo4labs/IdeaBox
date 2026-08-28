@@ -1,0 +1,60 @@
+@startuml
+!theme plain
+
+title Anonymous Chat - User Flow: Invite, Send, Receive, Offline Queue
+
+start
+
+:User A starts Node A;
+note right
+  Generates Ed25519 keypair
+  Binds v3 onion service
+  Address: a3kf...b7q2.onion
+end note
+
+:User A generates invite token;
+note right
+  Token = sign(pubkey_A, nonce, expiry)
+  Exported as text/QR
+end note
+
+:User A shares invite with User B\n(out-of-band: QR, airgap, secure channel);
+
+:User B starts Node B;
+
+:User B imports invite token;
+
+:Node B connects to Node A's onion service;
+note right
+  Handshake: key exchange
+  Authenticated channel
+  Per-session ratchet key
+end note
+
+if (Peer B online?) then (yes)
+    :Direct delivery;
+else (no)
+    :Queue at Node A;
+    note right
+      Message stored in queue.db
+      Retry timer scheduled
+      Notify A's user: pending
+    end note
+    :Wait for Node B online;
+    :On reconnect: drain queue;
+endif
+
+:User A composes message;
+:Message encrypted (E2E);
+:Send over Tor to B.onion;
+if (Node B reachable?) then (yes)
+    :Deliver to B's inbox;
+    :Notify User B;
+else (no)
+    :Re-queue at A;
+    :Backoff and retry;
+endif
+
+stop
+
+@enduml
