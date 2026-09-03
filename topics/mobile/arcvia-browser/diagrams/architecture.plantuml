@@ -1,0 +1,39 @@
+@startuml
+!theme plain
+title ArcVia Browser — Architecture & Request Filtering Flow
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+package "UI Layer (Jetpack Compose)" {
+  [Floating Bottom Command Bar]
+  [Spring Animations\n(dampingRatio ≈ 0.8, stiffness ≈ 400)]
+  [Card-Based Tab Switcher]
+  [1:1 Gesture Tracking]
+}
+
+package "Browser Core" {
+  [WebView / WebViewClient]
+  [Tab State Manager]
+}
+
+package "Filtering" {
+  [Local URL Filter\n(host blocklist)]
+  [Empty Response\nGenerator]
+}
+
+component "Network Socket" as NET
+
+[Floating Bottom Command Bar] --> [WebView / WebViewClient]
+[Card-Based Tab Switcher] --> [Tab State Manager]
+[Spring Animations\n(dampingRatio ≈ 0.8, stiffness ≈ 400)] --> [1:1 Gesture Tracking]
+
+[WebView / WebViewClient] --> [Local URL Filter\n(host blocklist)] : onShouldInterceptRequest\n(before socket opens)
+[Local URL Filter\n(host blocklist)] --> [Empty Response\nGenerator] : host matches
+[Local URL Filter\n(host blocklist)] --> NET : no match → allow
+[Empty Response\nGenerator] --> [WebView / WebViewClient] : instant empty response
+
+[Tab State Manager] --> [WebView / WebViewClient] : >2 bg tabs → shed memory\n(state + scroll cached locally)
+
+@enduml

@@ -15,7 +15,7 @@ IdeaBox is a structured repository for capturing, organizing, and developing app
 
 | Ideas | Topics | Diagrams | Status |
 |-------|--------|----------|--------|
-| 7 | 5 | 14 | Concept |
+| 8 | 5 | 14 | Concept |
 
 ---
 
@@ -88,7 +88,7 @@ IdeaBox/
 |-------|-------------|-------|
 | [Decentralized](./topics/decentralized/README.md) | Self-sovereign infrastructure and privacy-respecting systems | 1 |
 | [Desktop](./topics/desktop/README.md) | Desktop applications and system utilities | 1 |
-| [Mobile](./topics/mobile/README.md) | Mobile application concepts | 2 |
+| [Mobile](./topics/mobile/README.md) | Mobile application concepts | 3 |
 | [SaaS](./topics/saas/README.md) | Software-as-a-Service concepts | 2 |
 | [AI](./topics/ai/README.md) | AI-powered applications | 1 |
 
@@ -134,6 +134,13 @@ A peer-to-peer anonymous chat network where each user hosts a lightweight homese
 
 **Status:** Concept
 **Folder:** [topics/mobile/localmesh/](./topics/mobile/localmesh/)
+
+#### ArcVia Browser
+
+> A lightning-fast, thumb-friendly Android browser that combines Arc's reachable UI and space-focused design with Via's sub-second page loads and custom 120Hz spring physics — no bloat, no frame drops.
+
+**Status:** Concept
+**Folder:** [topics/mobile/arcvia-browser/](./topics/mobile/arcvia-browser/)
 
 ### SaaS
 
