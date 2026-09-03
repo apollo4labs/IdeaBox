@@ -1,0 +1,52 @@
+@startuml
+!theme plain
+title StreamHub — System Architecture & Availability Flow
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+package "Mobile App (Flutter / CMP)" {
+  [Discovery Rails\n(Trending, Top Rated, Genres)]
+  [Search\n(TMDB)]
+  [Watchlists]
+  [Deep-Link Handoff\n(url_launcher / Intents / UIApplication)]
+  [Onboard: Subscription\nToggles]
+}
+
+package "Supabase (Free Tier)" {
+  database "Postgres" as DB {
+    [users]
+    [user_watchlists]
+    [subscription_preferences]
+    [availability_cache\n(24h TTL)]
+  }
+  [Edge Functions\n(Deno/TypeScript)\navailability proxy]
+}
+
+component "TMDB API (free)" as TMDB
+component "Watchmode /\nStreaming Avail. API" as AVAIL
+component "Provider Native Apps\n(Netflix, Disney+, Max,\nPrime Video, Apple TV+)" as PROVIDER
+
+[Onboard: Subscription Toggles] --> [Discovery Rails] : filters active services
+[Discovery Rails] --> DB : subscription_preferences
+[Search] --> TMDB : metadata, posters, trailers
+[Search] --> [Watchlists]
+
+[Watchlists] --> DB : user_watchlists
+[Deep-Link Handoff] --> [Edge Functions] : availability lookup (cache-first)
+[Edge Functions] --> DB : query cache first
+DB --> [Edge Functions] : hit (≤24h) → return
+[Edge Functions] --> AVAIL : cache miss → on-demand
+AVAIL --> [Edge Functions] : region availability + deep links
+[Edge Functions] --> [Deep-Link Handoff] : resolve owner + link
+[Deep-Link Handoff] --> [Provider Native Apps] : OS deep link (nflx://)
+[Deep-Link Handoff] --> [Provider Web Portal] : fallback (app not installed)
+
+note right of DB
+  GitHub Actions keep-alive
+  pings to prevent free-tier
+  DB pause
+end note
+
+@enduml

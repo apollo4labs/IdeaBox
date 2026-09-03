@@ -21,3 +21,9 @@ A lightning-fast, thumb-friendly Android browser combining Arc's reachable UI an
 
 **Status:** Concept
 **Folder:** `topics/mobile/arcvia-browser/`
+
+### StreamHub
+A cross-platform streaming aggregator: one searchable catalog across Netflix, Disney+, Max, Prime Video, and Apple TV+ with subscription-aware filtering, cross-provider watchlists, and one-tap deep-link handoff into the provider's native app. Cache-first availability via Supabase, $0/month infra.
+
+**Status:** Concept
+**Folder:** `topics/mobile/streamhub/`

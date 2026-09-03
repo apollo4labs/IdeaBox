@@ -15,7 +15,7 @@ IdeaBox is a structured repository for capturing, organizing, and developing app
 
 | Ideas | Topics | Diagrams | Status |
 |-------|--------|----------|--------|
-| 8 | 5 | 14 | Concept |
+| 9 | 5 | 16 | Concept |
 
 ---
 
@@ -88,7 +88,7 @@ IdeaBox/
 |-------|-------------|-------|
 | [Decentralized](./topics/decentralized/README.md) | Self-sovereign infrastructure and privacy-respecting systems | 1 |
 | [Desktop](./topics/desktop/README.md) | Desktop applications and system utilities | 1 |
-| [Mobile](./topics/mobile/README.md) | Mobile application concepts | 3 |
+| [Mobile](./topics/mobile/README.md) | Mobile application concepts | 4 |
 | [SaaS](./topics/saas/README.md) | Software-as-a-Service concepts | 2 |
 | [AI](./topics/ai/README.md) | AI-powered applications | 1 |
 
@@ -141,6 +141,13 @@ A peer-to-peer anonymous chat network where each user hosts a lightweight homese
 
 **Status:** Concept
 **Folder:** [topics/mobile/arcvia-browser/](./topics/mobile/arcvia-browser/)
+
+#### StreamHub
+
+> One app to browse, search, and launch anything across every streaming service — a unified, subscription-aware catalog with cross-provider watchlists and one-tap deep links that open titles directly inside Netflix, Disney+, Max, Prime Video, or Apple TV+.
+
+**Status:** Concept
+**Folder:** [topics/mobile/streamhub/](./topics/mobile/streamhub/)
 
 ### SaaS
 

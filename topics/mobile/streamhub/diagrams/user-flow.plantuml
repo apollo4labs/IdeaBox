@@ -1,0 +1,48 @@
+@startuml
+!theme plain
+title StreamHub — User Flow: Onboarding → Browse → One-Tap Handoff
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+start
+:Open StreamHub;
+:Onboarding wizard —
+pick active services
+(Netflix, Disney+, Max,
+Prime Video, Apple TV+);
+:Store subscription_preferences
+(local + Supabase profile);
+repeat
+  :Browse discovery rails /
+  search (TMDB results
+  filtered by subscriptions);
+  :Tap title → open detail page;
+  :Edge Function checks
+  availability_cache (24h TTL);
+  if (cache hit?) then (yes)
+    :Return cached availability;
+  else (no)
+    :Call availability API
+    (on-demand);
+    :Store in cache;
+  endif
+  :"Watch Now" enabled on
+  owning provider(s);
+  if (user taps Watch Now) then (yes)
+    :Resolve deep link
+    (nflx://, universal/app link);
+    if (provider app installed?) then (yes)
+      :Launch native app directly;
+      :Playback starts;
+    else (no)
+      :Open provider mobile web portal;
+    endif
+  else (no)
+    :Add to cross-provider watchlist;
+  endif
+repeat while (keep browsing?)
+:Manage watchlist across providers;
+stop
+
+@enduml
