@@ -1,0 +1,57 @@
+@startuml
+!theme plain
+title API-First Analytics Dashboard — Ingestion, Query & Streaming
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+package "Data Sources" {
+  [Databases]
+  [Logs]
+  [Webhooks]
+  [SaaS APIs]
+}
+
+package "API-First Core" {
+  [Ingestion API\n(REST/gRPC)]
+  [Event Pipeline\n(buffer → compute, Kafka/NATS)]
+  database "ClickHouse" as CH {
+    [metrics]
+    [raw events]
+  }
+  database "Postgres" as PG {
+    [dashboards]
+    [widgets]
+    [users / keys]
+  }
+  [Query Engine]
+  [Public Query API\n(REST / WebSocket / SSE)]
+}
+
+package "Dashboard UI (API client)" {
+  [Widget Runtime\n(HTML/CSS/JS sandbox)]
+  [Widget Library]
+}
+
+[Databases] --> [Ingestion API]
+[Logs] --> [Ingestion API]
+[Webhooks] --> [Ingestion API]
+[SaaS APIs] --> [Ingestion API]
+[Ingestion API] --> [Event Pipeline]
+[Event Pipeline] --> CH : write metrics/events
+[Query Engine] --> CH : aggregate on read
+[Query Engine] --> PG : dashboard/widget metadata
+[Query Engine] --> [Public Query API] : return queries + live streams
+[Public Query API] --> [Dashboard UI (API client)] : data (REST/WS)
+[Public Query API] --> [Embedded Views / Automation] : signed tokens
+[Dashboard UI (API client)] --> [Widget Library]
+[Widget Library] --> [Query Engine] : render widget from query
+
+note right of Public Query API
+  The UI is just a client.
+  Anyone can query, embed,
+  or automate via the API.
+end note
+
+@enduml

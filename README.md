@@ -15,7 +15,7 @@ IdeaBox is a structured repository for capturing, organizing, and developing app
 
 | Ideas | Topics | Diagrams | Status |
 |-------|--------|----------|--------|
-| 9 | 5 | 16 | Concept |
+| 10 | 5 | 18 | Concept |
 
 ---
 
@@ -89,7 +89,7 @@ IdeaBox/
 | [Decentralized](./topics/decentralized/README.md) | Self-sovereign infrastructure and privacy-respecting systems | 1 |
 | [Desktop](./topics/desktop/README.md) | Desktop applications and system utilities | 1 |
 | [Mobile](./topics/mobile/README.md) | Mobile application concepts | 4 |
-| [SaaS](./topics/saas/README.md) | Software-as-a-Service concepts | 2 |
+| [SaaS](./topics/saas/README.md) | Software-as-a-Service concepts | 3 |
 | [AI](./topics/ai/README.md) | AI-powered applications | 1 |
 
 ---

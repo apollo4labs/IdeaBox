@@ -1,0 +1,31 @@
+@startuml
+!theme plain
+title API-First Analytics Dashboard — User Flow: Connect → Compose → Embed
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+start
+:Create workspace,\ngenerate API key;
+repeat
+  :Connect a data source\n(DB / logs / webhook / SaaS);
+  :Send events to Ingestion API
+  (flexible schema);
+  :Define metric query via API;
+  if (want real-time?) then (yes)
+    :Open streaming query\n(WebSocket / SSE)
+    :live updates as data lands;
+  else (no)
+    :Static query / refresh;
+  endif
+  :Compose dashboard from widget\nlibrary (time-series, table, gauge,\ncustom HTML/CSS/JS);
+  :All via API —\nUI is just a client;
+repeat while (more widgets/sources?)
+if (embed or automate?) then (yes)
+  :Generate signed embed token;
+  :Embed dashboard in app /\nwebhook into automation;
+else (no)
+endif
+stop
+
+@enduml

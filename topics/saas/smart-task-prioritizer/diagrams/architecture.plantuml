@@ -1,0 +1,50 @@
+@startuml
+!theme plain
+title Smart Task Prioritizer — Architecture & Ranking Pipeline
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+package "Clients" {
+  [Web App\n(React/Next.js)]
+  [Mobile App\n(Flutter)]
+}
+
+package "Backend" {
+  [Task/Project API\n(Fastify/Go)]
+  [Prioritization Service\n(ranker)]
+  [Dependency Engine]
+  database "Postgres" as DB {
+    [tasks]
+    [projects]
+    [dependencies]
+    [user_overrides]
+    [events]
+  }
+  [Learning Pipeline\n(retrain from overrides)]
+  [On-device Scorer\n(ONNX runtime)]
+}
+
+component "Ranking Model\n(LightGBM/XGBoost)" as MODEL
+
+[Web App] --> [Task/Project API]
+[Mobile App] --> [Task/Project API]
+[Task/Project API] --> DB
+[Mobile App] --> [On-device Scorer] : fast local scoring
+[Task/Project API] --> [Prioritization Service] : re-rank on event
+[Prioritization Service] --> [Dependency Engine] : respect blockers
+[Prioritization Service] --> MODEL : feature scoring
+MODEL --> [Prioritization Service] : ranked order + attributions
+[Dependency Engine] --> DB : deps, critical path
+[Learning Pipeline] --> DB : overrides/outcomes
+[Learning Pipeline] --> MODEL : retrain weights
+DB --> [Prioritization Service] : snapshot
+
+note right of MODEL
+  Returns "do this next" queue
+  plus feature attributions for
+  explainable "why" lines.
+end note
+
+@enduml

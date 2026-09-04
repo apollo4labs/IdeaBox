@@ -1,0 +1,50 @@
+@startuml
+!theme plain
+title AI Productivity Assistant — Agent Stack & Permissioned Integrations
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+package "User Tools" {
+  [Email\n(Gmail/Outlook)]
+  [Calendar]
+  [Slack]
+  [Docs\n(Google/Notion)]
+  [Ticketing\n(Jira/Linear)]
+  [CRM]
+}
+
+[Email] <-- [Integration Layer]
+[Calendar] <-- [Integration Layer]
+[Slack] <-- [Integration Layer]
+[Docs] <-- [Integration Layer]
+[Ticketing] <-- [Integration Layer]
+[CRM] <-- [Integration Layer]
+
+package "Agent Core" {
+  [Integration Layer\n(read + scoped write)]
+  [Agent Runtime\n(planner + tool-use)]
+  [Policy / Approval Gate]
+  [Audit Log]
+  [Personal Workflow Memory\n(templates, style, rules)]
+}
+
+database "Encrypted Local\nPreference Store" as MEM
+
+[Integration Layer] --> [Agent Runtime] : actions (scoped)
+[Agent Runtime] --> [Policy / Approval Gate] : propose action
+[Policy / Approval Gate] --> [Audit Log] : record
+[Agent Runtime] --> MEM : read/write preferences
+MEM --> [Agent Runtime] : learned style
+
+component "LLM Provider\n(+ optional local model)" as LLM
+[Agent Runtime] --> LLM : plan/compose
+
+note right of Agent Runtime
+  Consequential actions pause for
+  approval; only pre-authorized
+  low-risk actions run autonomously.
+end note
+
+@enduml

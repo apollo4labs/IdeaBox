@@ -1,0 +1,29 @@
+@startuml
+!theme plain
+title Smart Task Prioritizer — User Flow: Enter → Rank → Execute → Learn
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+start
+:Add tasks / projects\n(due dates, importance, effort);
+:Link dependencies\n("X blocks Y");
+repeat
+  :Open "Do this next" queue;
+  :Ranker scores task\n(deadline + importance + deps + energy);
+  if (blocked by dependency?) then (yes)
+    :Surface critical-path warning\n— do not suggest blocked task;
+  else (no)
+    :Suggest top item with "why" line;
+    if (user overrides order?) then (yes)
+      :Apply override;\n:Log for learning;
+    else (no)
+    endif
+    :Complete task;
+  endif
+repeat while (tasks remain?)
+:Weekly review — see trends\n& adjust weights;
+:Learning pipeline absorbs\noverrides/outcomes;
+stop
+
+@enduml

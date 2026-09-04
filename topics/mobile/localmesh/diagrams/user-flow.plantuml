@@ -1,0 +1,31 @@
+@startuml
+!theme plain
+title LocalMesh — User Flow: Mesh Join → Message → Share → Bridge
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+start
+:Open LocalMesh;
+:Auto-discovery on shared Wi-Fi\n(or BLE fallback);
+if (devices nearby found?) then (yes)
+  :Mesh forms automatically —\nzero config, no server;
+else (no)
+  :Retry / move into range;
+endif
+:Send message to a nearby peer;
+if (peer online?) then (yes)
+  :Deliver directly (encrypted);
+else (no)
+  :Store-and-forward — hold at relay,\ndeliver when path reopens;
+endif
+:Share file / photo\nthrough local directory;
+:Check local feed —\n"offering / need" posts;
+if (internet available & bridge on?) then (yes)
+  :Designated node bridges mesh\n& syncs to relay (opt-in);
+else (no)
+  :Continue fully offline;
+endif
+stop
+
+@enduml

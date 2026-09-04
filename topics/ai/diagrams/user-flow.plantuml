@@ -1,0 +1,35 @@
+@startuml
+!theme plain
+title AI Productivity Assistant — User Flow: Connect → Propose → Approve → Execute
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+start
+:Connect tools with\nscoped OAuth permissions;
+:Grant assistant read + selected write scopes;
+repeat
+  :Assistant observes routine work\n(email triage, scheduling, reports);
+  :Learns your templates & style
+  (asks before persisting);
+  if (routine task detected?) then (yes)
+    :Propose action with reason\n(e.g. "draft this week's report");
+    if (consequential?) then (yes)
+      :Pause for approval;
+      if (user approves?) then (yes)
+        :Execute multi-step task;
+        :Log to audit trail;
+      else (no)
+        :Discard / adjust;
+      endif
+    else (no)
+      :Run pre-authorized low-risk action;
+    endif
+  else (no)
+  endif
+repeat while (work continues)
+:Weekly digest —\n"what the assistant did";
+:Review / revoke scopes anytime;
+stop
+
+@enduml

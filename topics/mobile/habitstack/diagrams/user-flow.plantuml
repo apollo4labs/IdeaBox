@@ -1,0 +1,35 @@
+@startuml
+!theme plain
+title HabitStack — User Flow: Onboarding → Daily Loop → Squad
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+start
+:Onboarding —
+pick first micro-habit
+(e.g. "stretch", "drink water");
+repeat
+  :Open HabitStack;
+  :See ranked "stack" of 2-min\nmicro-actions (do-next first);
+  :Tap start → 2-min timer\n(extendable if in flow);
+  :Complete action → add brick\nto stack score;
+  if (all goals hit for the day?) then (yes)
+    :Good day — streak advances;
+  else (no)
+    :Partial day — bricks still count;;
+  endif
+  if (missed a day?) then (yes)
+    :Recovery brick allowance\nprevents full streak reset;
+  else (no)
+  endif
+repeat while (more actions today?)
+:Silent sync (\& offline-first);
+if (in a squad?) then (yes)
+  :Squad sees anonymized\non-track / slipped states;
+  :Daily gentle nudge if slipped;
+else (no)
+endif
+stop
+
+@enduml

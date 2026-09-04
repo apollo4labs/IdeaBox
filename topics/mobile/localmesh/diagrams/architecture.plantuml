@@ -1,0 +1,41 @@
+@startuml
+!theme plain
+title LocalMesh — Mesh Architecture & Optional Internet Bridge
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+package "Local Mesh (ad-hoc, P2P)" {
+  [Device A\n(node + relay)]
+  [Device B\n(node + relay)]
+  [Device C\n(node + relay)]
+  [Local Discovery\n(mDNS / BLE beacons)]
+  [Store-and-Forward\nQueue (per node)]
+  [Local Directory\n(peer list / feed)]
+}
+
+package "Optional Bridge" {
+  [Internet Bridge Node]
+  [Sync Relay Service\n(opt-in)]
+}
+
+[Device A] <--> [Device B] : encrypted peer chat (E2E)
+[Device B] <--> [Device C] : hop-by-hop routing
+[Device C] <--> [Device A] : redundant path
+[Local Discovery] <--> [Device A]
+[Local Discovery] <--> [Device B]
+[Local Discovery] <--> [Device C]
+[Device A] --> [Store-and-Forward Queue] : hold if peer offline
+[Device B] --> [Local Directory] : share files/images
+[Device C] --> [Local Directory]
+[Internet Bridge Node] <--> [Device A] : designated node w/ internet
+[Internet Bridge Node] --> [Sync Relay Service] : opt-in sync
+
+note right of Internet Bridge Node
+  Fully optional. Mesh works
+  with zero internet access;
+  bridge only adds cloud sync.
+end note
+
+@enduml

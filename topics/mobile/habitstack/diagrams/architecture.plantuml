@@ -1,0 +1,45 @@
+@startuml
+!theme plain
+title HabitStack — System Architecture
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+
+package "Mobile App (Flutter)" {
+  [Habit Engine\n(micro-actions, stacks,\nstreaks on-device)]
+  [2-Minute Timer]
+  [Local Storage\nSQLite (drift)]
+  [Sync Client]
+  [Squad UI\n(anonymized states)]
+}
+
+package "Backend" {
+  [Mobile Sync API\n(Fastify/Go)]
+  database "Postgres" as DB {
+    [users]
+    [habit_profiles]
+    [squad_memberships]
+    [completion_events]
+  }
+  [Squad / Accountability\nService]
+  [Push Notification\nWorker]
+}
+
+[Habit Engine] --> [Local Storage] : read/write (offline-first)
+[2-Minute Timer] --> [Habit Engine] : log completion
+[Habit Engine] --> [Sync Client] : queued changes
+[Sync Client] --> [Mobile Sync API] : silent sync (LWW)
+[Mobile Sync API] --> DB
+[Squad / Accountability Service] --> DB : memberships, states
+[Squad / Accountability Service] --> [Squad UI] : anonymized on-track/slipped
+[Push Notification Worker] --> [Mobile App (Flutter)] : reminders
+[Push Notification Worker] --> DB : scheduled jobs
+
+note right of DB
+  Sync is a mirror — the
+  habit engine is the source
+  of truth on-device.
+end note
+
+@enduml
